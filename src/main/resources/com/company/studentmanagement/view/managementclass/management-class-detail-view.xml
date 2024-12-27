@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      title="msg://managementClassDetailView.title"
+      focusComponent="form">
+    <data>
+        <instance id="managementClassDc"
+                  class="com.company.studentmanagement.entity.ManagementClass">
+            <fetchPlan extends="_base">
+                <property name="manager" fetchPlan="_instance_name">
+                    <property name="email"/>
+                    <property name="school" fetchPlan="_instance_name"/>
+                </property>
+                <property name="students" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="managementClassDl"/>
+            <collection id="managementClassStudentsDc" property="students"/>
+        </instance>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+    </facets>
+    <actions>
+        <action id="saveAction" type="detail_saveClose"/>
+        <action id="closeAction" type="detail_close"/>
+    </actions>
+    <layout>
+        <formLayout id="form" dataContainer="managementClassDc">
+            <responsiveSteps>
+                <responsiveStep minWidth="0" columns="1"/>
+                <responsiveStep minWidth="40em" columns="2"/>
+            </responsiveSteps>
+            <textField id="nameField" property="name"/>
+            <entityPicker id="managerField" property="manager">
+                <actions>
+                    <action id="entityLookup" type="entity_lookup"/>
+                    <action id="entityClear" type="entity_clear"/>
+                </actions>
+            </entityPicker>
+            <textField id="totalStudentsField" property="totalStudents"/>
+        </formLayout>
+        <nativeLabel text="Students"/>
+        <hbox>
+            <button action="managementClassStudentsDataGrid.addStudent"/>
+            <button action="managementClassStudentsDataGrid.removeStudent"/>
+        </hbox>
+        <dataGrid id="managementClassStudentsDataGrid" dataContainer="managementClassStudentsDc" width="100%" height="fit-content" minHeight="300px">
+            <actions>
+                <action id="addStudent" type="list_add"/>
+                <action id="removeStudent" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column key="studentPic" sortable="false" flexGrow="0" resizable="false"/>
+                <column property="code"/>
+                <column property="surname"/>
+                <column property="middleName"/>
+                <column property="firstName"/>
+                <column property="academicProgram"/>
+                <column property="yearOfStudy"/>
+                <column property="status"/>
+            </columns>
+        </dataGrid>
+        <hbox id="detailActions">
+            <button id="saveAndCloseButton" action="saveAction"/>
+            <button id="closeButton" action="closeAction"/>
+        </hbox>
+    </layout>
+</view>

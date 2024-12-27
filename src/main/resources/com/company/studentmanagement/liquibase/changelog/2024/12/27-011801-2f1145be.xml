@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="fis-student-management">
+        <createTable tableName="MANAGEMENT_CLASS">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_MANAGEMENT_CLASS"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="MANAGER_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column defaultValueNumeric="0" name="TOTAL_STUDENTS" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="fis-student-management">
+        <addUniqueConstraint columnNames="NAME" constraintName="IDX_MANAGEMENT_CLASS_UNQ_NAME"
+                             tableName="MANAGEMENT_CLASS"/>
+    </changeSet>
+    <changeSet id="3" author="fis-student-management">
+        <createIndex indexName="IDX_MANAGEMENT_CLASS_MANAGER" tableName="MANAGEMENT_CLASS">
+            <column name="MANAGER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="MANAGER_ID" baseTableName="MANAGEMENT_CLASS"
+                                 constraintName="FK_MANAGEMENT_CLASS_ON_MANAGER" referencedColumnNames="ID"
+                                 referencedTableName="TEACHER"/>
+    </changeSet>
+</databaseChangeLog>

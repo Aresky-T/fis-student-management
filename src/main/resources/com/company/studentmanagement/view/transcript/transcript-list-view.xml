@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://transcriptListView.title"
+      focusComponent="transcriptsDataGrid">
+    <data>
+        <collection id="transcriptsDc"
+                    class="com.company.studentmanagement.entity.Transcript">
+            <fetchPlan extends="_base">
+                <property name="student" fetchPlan="_instance_name">
+                    <property name="code"/>
+                    <property name="surname"/>
+                    <property name="firstName"/>
+                    <property name="email"/>
+                    <property name="managementClass" fetchPlan="_instance_name"/>
+                </property>
+                <property name="courseClass" fetchPlan="_instance_name">
+                </property>
+            </fetchPlan>
+            <loader id="transcriptsDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from Transcript e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="transcriptsDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="createButton" action="transcriptsDataGrid.create"/>
+            <button id="editButton" action="transcriptsDataGrid.edit"/>
+            <button id="readButton" action="transcriptsDataGrid.read"/>
+            <button id="refreshButton" action="transcriptsDataGrid.refresh"/>
+            <button id="removeButton" action="transcriptsDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="transcriptsDl"/>
+        </hbox>
+        <dataGrid id="transcriptsDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="transcriptsDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="read" type="list_read"/>
+                <action id="refresh" type="list_refresh"/>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column property="student"/>
+                <column property="semester"/>
+                <column property="courseClass.classCode"/>
+                <column property="processScore"/>
+                <column property="examScore"/>
+                <column property="finalScore"/>
+                <column property="letterGrade"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

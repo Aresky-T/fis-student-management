@@ -1,0 +1,75 @@
+(*) Quản lý sinh viên (yêu cầu các chức năng thêm mới, sửa, xóa, tìm kiếm)
+   1. Tạo Entity 'Trường học' với các thông tin cơ bản: Mã trường, tên trường…
+   2. Tạo Entity 'Giáo viên': Tên, tuổi, địa chỉ, SĐT…
+   3. Tạo Entity 'Lớp': Mã, tên, giáo viên…
+   4. Tạo Entity 'Sinh viên': Mã, tên, ngày sinh, CCCD, địa chỉ, SĐT, Lớp…
+   5. Tạo Entity 'Bảng điểm': Môn học, điểm, sinh viên… (Yêu cầu ở màn hình thêm mới sinh viên có lưới cho phép thêm sửa xóa điểm)
+
+
+(*) Entities: School, Teacher, Clazz, Student
+1. School - Trường hợp
+- id
+- code (mã trường) => String
+- name (tên trường) => String
+- address (địa chỉ)   => String / SchoolAddress
+- president (hiệu trưởng) => String / SchoolPresident
+
+2. Teacher - Giáo viên
+- id
+- name (tên) => String
+- age => Integer
+- address => String
+- phoneNumber => String
+- school => School
+- status => String / TeacherStatus (enum)
+- profile (Ảnh hồ sơ) => String
+
+3. ManagementClass - Lớp học quản lý
+- id
+- name => String
+- manager => Teacher
+- totalStudents => Integer
+- students => List<Student>
+
+4. Course - Học phần / môn học
+- id
+- code => String
+- name => String
+- status => CourseStatus
+
+4. CourseClass - Lớp học giảng dạy
+- id
+- classCode (mã lớp) => String
+- className (tên lớp) => String
+- course (học phần) => String / Course
+- type (loại lớp học phần)  => CourseClassType (enum)
+- teacher (giảng viên) => Teacher
+- credit (tín chỉ) => Integer
+- status (trạng thái) => CourseClassStatus (enum)
+- numberOfStudents => Integer
+
+5. Student
+- id
+- code => String
+- surname (Họ) => String
+- middleName (Tên Đệm) => String
+- firstName (Tên) => String
+- profile (Ảnh hồ sơ) => String
+- dateOfBirth (Ngày sinh) => LocalDate
+- citizenId (CCCD) => String
+- address (Địa chỉ) => String
+- phoneNumber (Sdt) => String
+- managementClass (Lớp quản lý) => ManagementClass
+- academicProgram (Chương trình đào tạo) => String
+- yearOfStudy (Sinh viên năm thứ) => Integer
+- status (Trạng thái sinh viên) => StudentStatus
+
+6. Transcript
+- id
+- student => Student
+- semester (Kỳ học) => Integer
+- courseClass (Lớp học phần) => CourseClass
+- processScore (Điểm quá trình) => Float
+- examScore (Điểm thi cuối kỳ) => Float
+- finalScore (Điểm tổng kết) => Float
+- letterGrade (Điểm chữ) => Char

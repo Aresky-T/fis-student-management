@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<view xmlns="http://jmix.io/schema/flowui/view"
+      xmlns:c="http://jmix.io/schema/flowui/jpql-condition"
+      title="msg://courseClassListView.title"
+      focusComponent="courseClassesDataGrid">
+    <data>
+        <collection id="courseClassesDc"
+                    class="com.company.studentmanagement.entity.CourseClass">
+            <fetchPlan extends="_base">
+                <property name="course" fetchPlan="_instance_name"/>
+                <property name="teacher" fetchPlan="_instance_name"/>
+            </fetchPlan>
+            <loader id="courseClassesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from CourseClass e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <urlQueryParameters>
+            <genericFilter component="genericFilter"/>
+            <pagination component="pagination"/>
+        </urlQueryParameters>
+    </facets>
+    <actions>
+        <action id="selectAction" type="lookup_select"/>
+        <action id="discardAction" type="lookup_discard"/>
+    </actions>
+    <layout>
+        <genericFilter id="genericFilter"
+                       dataLoader="courseClassesDl">
+            <properties include=".*"/>
+        </genericFilter>
+        <hbox id="buttonsPanel" classNames="buttons-panel">
+            <button id="createButton" action="courseClassesDataGrid.create"/>
+            <button id="editButton" action="courseClassesDataGrid.edit"/>
+            <button id="readButton" action="courseClassesDataGrid.read"/>
+            <button id="refreshButton" action="courseClassesDataGrid.refresh"/>
+            <button id="removeButton" action="courseClassesDataGrid.remove"/>
+            <simplePagination id="pagination" dataLoader="courseClassesDl"/>
+        </hbox>
+        <dataGrid id="courseClassesDataGrid"
+                  width="100%"
+                  minHeight="20em"
+                  dataContainer="courseClassesDc"
+                  columnReorderingAllowed="true">
+            <actions>
+                <action id="create" type="list_create"/>
+                <action id="edit" type="list_edit"/>
+                <action id="read" type="list_read"/>
+                <action id="refresh" type="list_refresh"/>
+                <action id="remove" type="list_remove"/>
+            </actions>
+            <columns resizable="true">
+                <column property="classCode"/>
+                <column property="className"/>
+                <column property="semester"/>
+                <column property="course"/>
+                <column property="type"/>
+                <column property="teacher"/>
+                <column property="credit"/>
+                <column property="status"/>
+                <column property="numberOfStudents"/>
+            </columns>
+        </dataGrid>
+        <hbox id="lookupActions" visible="false">
+            <button id="selectButton" action="selectAction"/>
+            <button id="discardButton" action="discardAction"/>
+        </hbox>
+    </layout>
+</view>

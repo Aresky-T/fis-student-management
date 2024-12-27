@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="fis-student-management">
+        <createTable tableName="COURSE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_COURSE"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CODE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATUS" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="fis-student-management">
+        <createTable tableName="COURSE_CLASS">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_COURSE_CLASS"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CLASS_CODE" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CLASS_NAME" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="COURSE_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TYPE_" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TEACHER_ID" type="UUID"/>
+            <column name="CREDIT" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STATUS" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="NUMBER_OF_STUDENTS" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="fis-student-management">
+        <createTable tableName="TRANSCRIPT">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_TRANSCRIPT"/>
+            </column>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STUDENT_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="SEMESTER" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="COURSE_CLASS_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="PROCESS_SCORE" type="FLOAT"/>
+            <column name="EXAM_SCORE" type="FLOAT"/>
+            <column name="FINAL_SCORE" type="FLOAT"/>
+            <column name="LETTER_GRADE" type="CHAR"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="4" author="fis-student-management">
+        <addColumn tableName="STUDENT">
+            <column name="EMAIL" type="VARCHAR(255)"/>
+        </addColumn>
+
+        <addNotNullConstraint columnDataType="VARCHAR(255)" columnName="EMAIL" defaultNullValue="''"
+                              tableName="STUDENT"/>
+    </changeSet>
+    <changeSet id="5" author="fis-student-management">
+        <addUniqueConstraint columnNames="CLASS_CODE" constraintName="IDX_COURSE_CLASS_UNQ_CLASS_CODE"
+                             tableName="COURSE_CLASS"/>
+    </changeSet>
+    <changeSet id="6" author="fis-student-management">
+        <addUniqueConstraint columnNames="CODE" constraintName="IDX_COURSE_UNQ_CODE" tableName="COURSE"/>
+    </changeSet>
+    <changeSet id="7" author="fis-student-management">
+        <createIndex indexName="IDX_COURSE_CLASS_COURSE" tableName="COURSE_CLASS">
+            <column name="COURSE_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="COURSE_ID" baseTableName="COURSE_CLASS"
+                                 constraintName="FK_COURSE_CLASS_ON_COURSE" referencedColumnNames="ID"
+                                 referencedTableName="COURSE"/>
+    </changeSet>
+    <changeSet id="8" author="fis-student-management">
+        <createIndex indexName="IDX_COURSE_CLASS_NAME" tableName="COURSE_CLASS">
+            <column name="CLASS_NAME"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="9" author="fis-student-management">
+        <createIndex indexName="IDX_COURSE_CLASS_TEACHER" tableName="COURSE_CLASS">
+            <column name="TEACHER_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="TEACHER_ID" baseTableName="COURSE_CLASS"
+                                 constraintName="FK_COURSE_CLASS_ON_TEACHER" referencedColumnNames="ID"
+                                 referencedTableName="TEACHER"/>
+    </changeSet>
+    <changeSet id="10" author="fis-student-management">
+        <createIndex indexName="IDX_TRANSCRIPT_COURSE_CLASS" tableName="TRANSCRIPT">
+            <column name="COURSE_CLASS_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="COURSE_CLASS_ID" baseTableName="TRANSCRIPT"
+                                 constraintName="FK_TRANSCRIPT_ON_COURSE_CLASS" referencedColumnNames="ID"
+                                 referencedTableName="COURSE_CLASS"/>
+    </changeSet>
+    <changeSet id="11" author="fis-student-management">
+        <createIndex indexName="IDX_TRANSCRIPT_STUDENT" tableName="TRANSCRIPT">
+            <column name="STUDENT_ID"/>
+        </createIndex>
+
+        <addForeignKeyConstraint baseColumnNames="STUDENT_ID" baseTableName="TRANSCRIPT"
+                                 constraintName="FK_TRANSCRIPT_ON_STUDENT" onDelete="CASCADE" referencedColumnNames="ID"
+                                 referencedTableName="STUDENT"/>
+    </changeSet>
+    <changeSet id="12" author="fis-student-management">
+        <dropNotNullConstraint columnDataType="varchar(1024)" columnName="PICTURE" tableName="STUDENT"/>
+    </changeSet>
+</databaseChangeLog>
